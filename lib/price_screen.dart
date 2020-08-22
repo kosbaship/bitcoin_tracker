@@ -21,9 +21,8 @@ class _PriceScreenState extends State<PriceScreen> {
     List<DropdownMenuItem <String>> dropDownItem = [];
 
     // دي حلقه تكراريه هتجبلي العناصر اللي هتتعرض للمستخدم
-    for (int i = 0; i<currenciesList.length; i++) {
+    for (String currency in currenciesList) {
       // هات القيم اللي ف الليسته اللي هتتعرض بناء علي الفهرس
-       String currency = currenciesList[i];
 
 
        // حط القيمه النصيه في منيو ايتم  واحفظها ف متغير
