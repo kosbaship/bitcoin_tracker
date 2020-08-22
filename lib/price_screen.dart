@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// هنستدعي المكتبه اللي فيها ادوات تخص الايفون بس
+import 'package:flutter/cupertino.dart';
 import 'coin_data.dart';
 class PriceScreen extends StatefulWidget {
   @override
@@ -7,38 +9,34 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
 
-  // تعين القيمه الافتراضيه اللي هتظهر للمستخدم
+
   String selectedCurrency = 'USD';
 
-
-  // هنعمل loop علشان نجيب كل الداتا اللي في list اللي عندنا
-  // وللتذكره كل عنصر ف الداتا دي بيمثل اختيار من القايمه بتاعتنا
   List<DropdownMenuItem> getDropDownItems(){
-    // دي قايمه فيها ليسته بالعناصر اللي هترجع للمستخدم
-    // هبنيها فاضيه هنا واعمل الحلقه اللي هتلف علي كل العناصر وكل مره
-    // هيلف لفه في اخر اللفه هيخزني قيمه جديده هنا في القايمه بتاعتي
-    // لازم احط نوع الحاجه اللي بتتعرض ف الدروب داون ايتم وهنا انا بعرضها استرنج ف هتبق استرنج
+    // ملحوظه تخص الليسته والماب علي الاقل عرفها حتي ولو فاضيه
     List<DropdownMenuItem <String>> dropDownItem = [];
-
-    // دي حلقه تكراريه هتجبلي العناصر اللي هتتعرض للمستخدم
     for (String currency in currenciesList) {
-      // هات القيم اللي ف الليسته اللي هتتعرض بناء علي الفهرس
-
-
-       // حط القيمه النصيه في منيو ايتم  واحفظها ف متغير
         var  newItem =  DropdownMenuItem(
           child:  Text(currency),
           value: currency,
         );
 
-        // خزن المنيو ايتم في ليسته العناصر اللي هترجع للعرض
         dropDownItem.add(newItem);
     }
-
-    // هرجع اللسته للمستخدم
     return dropDownItem;
   }
 
+  // الاداه بتاعه الاي او اس بتستقبل ليسته من widget عاديه وانا عاوز اعرض فيها
+  // ليسته من ادا Text جواها نصوص فا انا هنا هعمل الداله بتعتي بترجه اللي انا عاوزه
+  List<Text> getPickerItems(){
+    // ملحوظه تخص الليسته والماب علي الاقل عرفها حتي ولو فاضيه
+    List<Text> pickerItem = [];
+    for (String currency in currenciesList) {
+      var  newItem =  Text(currency);
+      pickerItem.add(newItem);
+    }
+    return pickerItem;
+  }
 
 
   @override
@@ -78,20 +76,15 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: DropdownButton<String>(
-              //   فاليو دي القيمه اللي هتظهر او ما البرنامج يفتح او يتعمله رفرش
-              // كدا انا هنا بحط فيها قيمه افتراضيه بايدي
-              value: selectedCurrency,
-              // هيا الايتمز دي بتستقبل لسته ممكن احطها واحدا واحده
-              // او استدعي داله هنا بترجع لسته جاهزه
-              items: getDropDownItems(),
-
-              // فاليو دي القيمه المختاره او ظهاره في الحال للسمتخدم
-              onChanged: (value) {
-                setState(() {
-                  // فاليو دي القيمه المختاره او ظهاره في الحال للسمتخدم
-                  selectedCurrency = value;
-                });
+            child: CupertinoPicker(
+              backgroundColor: Colors.lightBlue,
+              // دي العناصر اللي هتتعرض
+              children: getPickerItems(),
+              // طول العنصر قد ايه
+              itemExtent: 32.0,
+              // اللي هيحصل واحنا بنبل بين العناصر ونقف عند عنصر معين
+              onSelectedItemChanged: (selectedIndex){
+                print(currenciesList[selectedIndex] );
               },
             ),
           ),
@@ -100,3 +93,15 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 }
+
+
+//DropdownButton<String>(
+//value: selectedCurrency,
+//items: getDropDownItems(),
+//
+//onChanged: (value) {
+//setState(() {
+//selectedCurrency = value;
+//});
+//},
+//)
