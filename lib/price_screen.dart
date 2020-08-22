@@ -1,14 +1,45 @@
 import 'package:flutter/material.dart';
-
+import 'coin_data.dart';
 class PriceScreen extends StatefulWidget {
   @override
   _PriceScreenState createState() => _PriceScreenState();
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  // الاول - بنعرف القيمه اللي هتتغير هنا
-  // دي هتبق القيمه اللي هتظهر كاول عنصر تم اختياره
-  String dropdownValue = 'USD';
+
+  // تعين القيمه الافتراضيه اللي هتظهر للمستخدم
+  String selectedCurrency = 'USD';
+
+
+  // هنعمل loop علشان نجيب كل الداتا اللي في list اللي عندنا
+  // وللتذكره كل عنصر ف الداتا دي بيمثل اختيار من القايمه بتاعتنا
+  List<DropdownMenuItem> getDropDownItems(){
+    // دي قايمه فيها ليسته بالعناصر اللي هترجع للمستخدم
+    // هبنيها فاضيه هنا واعمل الحلقه اللي هتلف علي كل العناصر وكل مره
+    // هيلف لفه في اخر اللفه هيخزني قيمه جديده هنا في القايمه بتاعتي
+    // لازم احط نوع الحاجه اللي بتتعرض ف الدروب داون ايتم وهنا انا بعرضها استرنج ف هتبق استرنج
+    List<DropdownMenuItem <String>> dropDownItem = [];
+
+    // دي حلقه تكراريه هتجبلي العناصر اللي هتتعرض للمستخدم
+    for (int i = 0; i<currenciesList.length; i++) {
+      // هات القيم اللي ف الليسته اللي هتتعرض بناء علي الفهرس
+       String currency = currenciesList[i];
+
+
+       // حط القيمه النصيه في منيو ايتم  واحفظها ف متغير
+        var  newItem =  DropdownMenuItem(
+          child:  Text(currency),
+          value: currency,
+        );
+
+        // خزن المنيو ايتم في ليسته العناصر اللي هترجع للعرض
+        dropDownItem.add(newItem);
+    }
+
+    // هرجع اللسته للمستخدم
+    return dropDownItem;
+  }
+
 
 
   @override
@@ -48,34 +79,19 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-//            بنستخدم الاداه بتاعه المنيو
             child: DropdownButton<String>(
-//              دي القيمه الافتراضيه هتظهر ف الاول
-//              يعني اللي جواها هظهر كاول عنصر تم اختياره
-              value: dropdownValue,
-              items: [
-//                لازم اول قيمه ف المنيو تتساوا مع القيمه الافتراضيه
-                DropdownMenuItem(
-//                  دي القيمه اللي هتتحط بعد الاختيار
-                  value: 'USD',
-//                  دي القيمه اللي هتتعرض علشان نختار منها
-                  child: Text('USD'),
-                ),
-//                هتحط باقي العناصر عادي
-                DropdownMenuItem(
-                  value: 'POUND',
-                  child: Text('POUND'),
-                ),
-//                دا الت عنصر
-                DropdownMenuItem(
-                  value: 'MOU',
-                  child: Text('MOU'),
-                ),
-              ],
-//              لما يحصل تغير استخدم القيمه اللي اتغيرت حطها في القايمه اللي بنعين منها
+              //   فاليو دي القيمه اللي هتظهر او ما البرنامج يفتح او يتعمله رفرش
+              // كدا انا هنا بحط فيها قيمه افتراضيه بايدي
+              value: selectedCurrency,
+              // هيا الايتمز دي بتستقبل لسته ممكن احطها واحدا واحده
+              // او استدعي داله هنا بترجع لسته جاهزه
+              items: getDropDownItems(),
+
+              // فاليو دي القيمه المختاره او ظهاره في الحال للسمتخدم
               onChanged: (value) {
                 setState(() {
-                  dropdownValue = value;
+                  // فاليو دي القيمه المختاره او ظهاره في الحال للسمتخدم
+                  selectedCurrency = value;
                 });
               },
             ),
