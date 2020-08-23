@@ -1,43 +1,66 @@
 import 'package:flutter/material.dart';
-// هنستدعي المكتبه اللي فيها ادوات تخص الايفون بس
 import 'package:flutter/cupertino.dart';
 import 'coin_data.dart';
+// هنستدعي الباكدش اللي بتسمحلنا نعرف احنا علي انهو Platform
+// وبس انا هجيب الكلاس اللي اسمه بلاتفورم
+// شو انك تجيب كلاس واحد من الباكدج
+// هايد انك تخفي واحد ميظهرش ف النشروع
+// از كانت اننا نغير اسمه ف الاستخدام هنا
+import 'dart:io' show Platform;
+
 class PriceScreen extends StatefulWidget {
   @override
   _PriceScreenState createState() => _PriceScreenState();
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-
-
   String selectedCurrency = 'USD';
 
-  List<DropdownMenuItem> getDropDownItems(){
-    // ملحوظه تخص الليسته والماب علي الاقل عرفها حتي ولو فاضيه
-    List<DropdownMenuItem <String>> dropDownItem = [];
-    for (String currency in currenciesList) {
-        var  newItem =  DropdownMenuItem(
-          child:  Text(currency),
-          value: currency,
-        );
+//  هنعمل الدله اللي بتجيب الاداه اللي بتشتغلي علي اندرويد
+  DropdownButton<String> getAndroidDropDown() {
+    return DropdownButton<String>(
+      value: selectedCurrency,
+      items: getDropDownItems(),
+      onChanged: (value) {
+        setState(() {
+          selectedCurrency = value;
+        });
+      },
+    );
+  }
 
-        dropDownItem.add(newItem);
+  List<DropdownMenuItem> getDropDownItems() {
+    List<DropdownMenuItem<String>> dropDownItem = [];
+    for (String currency in currenciesList) {
+      var newItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+
+      dropDownItem.add(newItem);
     }
     return dropDownItem;
   }
+  //  هنعمل الدله اللي بتجيب الاداه اللي بتشتغلي علي IOS
+  CupertinoPicker getIOSPicker(){
+    return CupertinoPicker(
+      backgroundColor: Colors.lightBlue,
+      children: getPickerItems(),
+      itemExtent: 32.0,
+      onSelectedItemChanged: (selectedIndex) {
+        print(currenciesList[selectedIndex]);
+      },
+    );
+  }
 
-  // الاداه بتاعه الاي او اس بتستقبل ليسته من widget عاديه وانا عاوز اعرض فيها
-  // ليسته من ادا Text جواها نصوص فا انا هنا هعمل الداله بتعتي بترجه اللي انا عاوزه
-  List<Text> getPickerItems(){
-    // ملحوظه تخص الليسته والماب علي الاقل عرفها حتي ولو فاضيه
+  List<Text> getPickerItems() {
     List<Text> pickerItem = [];
     for (String currency in currenciesList) {
-      var  newItem =  Text(currency);
+      var newItem = Text(currency);
       pickerItem.add(newItem);
     }
     return pickerItem;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,32 +99,12 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: CupertinoPicker(
-              backgroundColor: Colors.lightBlue,
-              // دي العناصر اللي هتتعرض
-              children: getPickerItems(),
-              // طول العنصر قد ايه
-              itemExtent: 32.0,
-              // اللي هيحصل واحنا بنبل بين العناصر ونقف عند عنصر معين
-              onSelectedItemChanged: (selectedIndex){
-                print(currenciesList[selectedIndex] );
-              },
-            ),
+            // لو هو اندرويد اعرض كذا لو اي حاجه تانيه اعرض بنظام ابل
+            // انا هنا استخدمت ال Ternary operator بدل ما اعملها داله لوحدها
+            child: (Platform.isAndroid) ? getAndroidDropDown() : getIOSPicker(),
           ),
         ],
       ),
     );
   }
 }
-
-
-//DropdownButton<String>(
-//value: selectedCurrency,
-//items: getDropDownItems(),
-//
-//onChanged: (value) {
-//setState(() {
-//selectedCurrency = value;
-//});
-//},
-//)
