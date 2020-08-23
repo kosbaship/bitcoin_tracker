@@ -33,7 +33,12 @@ class _PriceScreenState extends State<PriceScreen> {
     List<DropdownMenuItem<String>> dropDownItem = [];
     for (String currency in currenciesList) {
       var newItem = DropdownMenuItem(
-        child: Text(currency),
+        child: Text(currency,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 26.0
+          ),
+        ),
         value: currency,
       );
 
@@ -42,14 +47,25 @@ class _PriceScreenState extends State<PriceScreen> {
     return dropDownItem;
   }
   //  هنعمل الدله اللي بتجيب الاداه اللي بتشتغلي علي IOS
-  CupertinoPicker getIOSPicker(){
-    return CupertinoPicker(
-      backgroundColor: Colors.lightBlue,
-      children: getPickerItems(),
-      itemExtent: 32.0,
-      onSelectedItemChanged: (selectedIndex) {
-        print(currenciesList[selectedIndex]);
-      },
+  CupertinoTheme getIOSPicker(){
+    // تعديل علي الثيم اللي يخص ابل
+    return CupertinoTheme(
+      data: CupertinoThemeData(
+        textTheme: CupertinoTextThemeData(
+          pickerTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 26.0
+          ),
+        ),
+      ),
+      child: CupertinoPicker(
+        backgroundColor: Colors.lightBlue,
+        children: getPickerItems(),
+        itemExtent: 32.0,
+        onSelectedItemChanged: (selectedIndex) {
+          print(currenciesList[selectedIndex]);
+        },
+      ),
     );
   }
 
