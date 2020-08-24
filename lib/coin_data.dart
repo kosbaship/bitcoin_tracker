@@ -1,25 +1,11 @@
 const List<String> currenciesList = [
-  'AUD',
-  'BRL',
-  'CAD',
-  'CNY',
+//  'EGP',
+  'USD',
+  'AED',
+//  'SAR',
   'EUR',
   'GBP',
-  'HKD',
-  'IDR',
-  'ILS',
-  'INR',
-  'JPY',
-  'MXN',
-  'NOK',
-  'NZD',
-  'PLN',
-  'RON',
-  'RUB',
-  'SEK',
-  'SGD',
-  'USD',
-  'ZAR'
+  'AUD',
 ];
 
 const List<String> cryptoList = [

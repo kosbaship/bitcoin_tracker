@@ -1,22 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'coin_data.dart';
-// هنستدعي الباكدش اللي بتسمحلنا نعرف احنا علي انهو Platform
-// وبس انا هجيب الكلاس اللي اسمه بلاتفورم
-// شو انك تجيب كلاس واحد من الباكدج
-// هايد انك تخفي واحد ميظهرش ف النشروع
-// از كانت اننا نغير اسمه ف الاستخدام هنا
+import 'networking.dart';
+
 import 'dart:io' show Platform;
+const apiKey = '5D9FC9A1-A5D5-462E-925E-B3ABD7E9A083';
+
+
 
 class PriceScreen extends StatefulWidget {
   @override
   _PriceScreenState createState() => _PriceScreenState();
 }
 
-class _PriceScreenState extends State<PriceScreen> {
-  String selectedCurrency = 'USD';
 
-//  هنعمل الدله اللي بتجيب الاداه اللي بتشتغلي علي اندرويد
+class _PriceScreenState extends State<PriceScreen> {
+
+  String selectedCurrency = 'AUD';
+  String priceString = '?';
+
+  @override
+  void initState() {
+    super.initState();
+    getDataThrowHelper();
+  }
+
+  Future getDataThrowHelper() async {
+    NetworkHelper networkHelper = NetworkHelper(
+        'https://rest.coinapi.io/v1/exchangerate/BTC/$selectedCurrency?apikey=$apiKey');
+
+    var decodedData = await networkHelper.getDataFromNet();
+    updateUI(decodedData);
+  }
+
+  void updateUI(dynamic fullData) async{
+      double rate = fullData['rate'];
+      int price = rate.toInt();
+      priceString = price.toString();
+  }
+
+
   DropdownButton<String> getAndroidDropDown() {
     return DropdownButton<String>(
       value: selectedCurrency,
@@ -24,6 +47,7 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
+          getDataThrowHelper();
         });
       },
     );
@@ -46,9 +70,7 @@ class _PriceScreenState extends State<PriceScreen> {
     }
     return dropDownItem;
   }
-  //  هنعمل الدله اللي بتجيب الاداه اللي بتشتغلي علي IOS
   CupertinoTheme getIOSPicker(){
-    // تعديل علي الثيم اللي يخص ابل
     return CupertinoTheme(
       data: CupertinoThemeData(
         textTheme: CupertinoTextThemeData(
@@ -100,7 +122,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ? USD',
+                  '1 BTC = $priceString $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -115,8 +137,6 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            // لو هو اندرويد اعرض كذا لو اي حاجه تانيه اعرض بنظام ابل
-            // انا هنا استخدمت ال Ternary operator بدل ما اعملها داله لوحدها
             child: (Platform.isAndroid) ? getAndroidDropDown() : getIOSPicker(),
           ),
         ],
